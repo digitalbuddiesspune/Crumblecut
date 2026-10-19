@@ -25,7 +25,7 @@ function requireConfig() {
     templateId,
     senderId: (process.env.MSG91_SENDER_ID || '').trim(),
     useSender: process.env.MSG91_USE_SENDER === 'true',
-    brandName: (process.env.MSG91_BRAND_NAME || 'VARDROBE').trim(),
+    brandName: (process.env.MSG91_BRAND_NAME || 'Crumblecut').trim(),
   };
 }
 

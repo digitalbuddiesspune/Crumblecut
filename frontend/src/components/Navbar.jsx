@@ -178,7 +178,7 @@ const Navbar = () => {
           <Link to="/" className="flex-shrink-0 z-10">
             <img 
               src={logo} 
-              alt="VARDROBE Logo" 
+              alt="Crumblecut Logo" 
               className="h-8 sm:h-9 md:h-10 lg:h-11 w-auto object-contain"
             />
           </Link>

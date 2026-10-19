@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import { Product } from '../models/product.js';
 
 const BRAND_POOL = [
-  'Vardrobe Classic',
-  'Vardrobe Loom',
+  'Crumblecut Classic',
+  'Crumblecut Loom',
   'CityThread Co.',
   'MetroWeave',
   'Northline Apparel',

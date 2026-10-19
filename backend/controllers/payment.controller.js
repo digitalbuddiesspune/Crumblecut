@@ -259,7 +259,7 @@ export const createOrder = async (req, res) => {
     const buyerEmail =
       req.body?.email ||
       req.body?.notes?.email ||
-      `${buyerPhone}@vardrobe.customer`;
+      `${buyerPhone}@crumblecut.customer`;
 
     const airpay = await generateUpiQr({
       orderid,

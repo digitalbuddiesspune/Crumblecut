@@ -25,7 +25,7 @@ export const getHeaderData = async (req, res) => {
     const headerData = {
       logo: {
         url: '/logo.png',
-        alt: 'VARDROBE Logo'
+        alt: 'Crumblecut Logo'
       },
       navigation: {
         categories: categories,

@@ -24,7 +24,7 @@ const ShippingPolicy = () => {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Shipping Information</h2>
             <p className="text-gray-700 leading-relaxed">
-              At VARDROBE, we are committed to delivering your orders safely and on time. This Shipping Policy outlines our shipping procedures, delivery times, and shipping charges.
+              At Crumblecut, we are committed to delivering your orders safely and on time. This Shipping Policy outlines our shipping procedures, delivery times, and shipping charges.
             </p>
           </section>
 

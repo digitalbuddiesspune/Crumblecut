@@ -6,7 +6,7 @@ const PrivacyPolicyContent = () => {
       <section>
         <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Introduction</h2>
         <p className="text-gray-700 leading-relaxed mb-4">
-          Welcome to VARDROBE (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy and ensuring you have a positive experience on our website and in using our products and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.
+          Welcome to Crumblecut (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy and ensuring you have a positive experience on our website and in using our products and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.
         </p>
       </section>
 

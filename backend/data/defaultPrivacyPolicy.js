@@ -3,7 +3,7 @@ export const defaultPrivacyPolicy = {
   title: 'Privacy Policy',
   content: `<section>
 <h2>1. Introduction</h2>
-<p>Welcome to VARDROBE ("we," "our," or "us"). We are committed to protecting your privacy and ensuring you have a positive experience on our website and in using our products and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
+<p>Welcome to Crumblecut ("we," "our," or "us"). We are committed to protecting your privacy and ensuring you have a positive experience on our website and in using our products and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
 </section>
 
 <section>
@@ -94,7 +94,7 @@ export const defaultPrivacyPolicy = {
 <section>
 <h2>10. Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, please contact us:</p>
-<p><strong>Email:</strong> support@vardrobe.in, kavyanshentreprises@gmail.com</p>
+<p><strong>Email:</strong> support@crumblecut.in, kavyanshentreprises@gmail.com</p>
 <p><strong>Phone:</strong> +91 9355618308</p>
 <p><strong>Company Name:</strong> KAVYANSH ENTREPRISES PRIVATE LIMITED</p>
 <p><strong>GSTIN:</strong> 07AAKCK9401A1ZT</p>

@@ -139,7 +139,7 @@ const SignIn = () => {
           <div className="text-center">
             <Link to="/" className="inline-block mb-8">
               <h1 className="text-5xl font-serif font-bold text-black">
-                VARDROBE
+                Crumblecut
               </h1>
             </Link>
             <p className="text-lg text-gray-600 max-w-sm mx-auto leading-relaxed">
@@ -155,7 +155,7 @@ const SignIn = () => {
             <div className="lg:hidden text-center mb-6">
               <Link to="/" className="inline-block mb-6">
                 <h1 className="text-2xl font-serif font-bold text-black">
-                  VARDROBE
+                  Crumblecut
                 </h1>
               </Link>
             </div>

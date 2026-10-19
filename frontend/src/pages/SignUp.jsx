@@ -149,7 +149,7 @@ const SignUp = () => {
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 items-center justify-center">
           <div className="text-center">
             <Link to="/" className="inline-block mb-8">
-              <h1 className="text-6xl font-serif font-bold text-black">VARDROBE</h1>
+              <h1 className="text-6xl font-serif font-bold text-black">Crumblecut</h1>
             </Link>
             <p className="text-xl text-gray-600 max-w-md mx-auto leading-relaxed">
               Create your account and explore premium fashion with exclusive offers.
@@ -161,7 +161,7 @@ const SignUp = () => {
           <div className="w-full max-w-md">
             <div className="lg:hidden text-center mb-8">
               <Link to="/" className="inline-block mb-6">
-                <h1 className="text-3xl font-serif font-bold text-black">VARDROBE</h1>
+                <h1 className="text-3xl font-serif font-bold text-black">Crumblecut</h1>
               </Link>
             </div>
 

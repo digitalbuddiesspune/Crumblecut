@@ -70,7 +70,7 @@ function getMerchantDomain() {
   const raw =
     process.env.AIRPAY_MER_DOM ||
     (process.env.NODE_ENV === 'production'
-      ? process.env.FRONTEND_URL || 'https://www.vardrobe.in'
+      ? process.env.FRONTEND_URL || 'https://www.crumblecut.in'
       : 'http://localhost');
   return Buffer.from(String(raw).replace(/\/$/, ''), 'utf8').toString('base64');
 }
@@ -143,7 +143,7 @@ export async function generateUpiQr({
     orderid,
     amount: amt,
     buyerPhone: String(buyerPhone || '').replace(/\D/g, '').slice(-10),
-    buyerEmail: buyerEmail || 'customer@vardrobe.in',
+    buyerEmail: buyerEmail || 'customer@crumblecut.in',
     mer_dom,
     call_type,
   };

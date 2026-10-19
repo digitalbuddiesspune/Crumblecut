@@ -24,7 +24,7 @@ const ReturnPolicy = () => {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Overview</h2>
             <p className="text-gray-700 leading-relaxed">
-              At VARDROBE, we want you to be completely satisfied with your purchase. This Return & Refund Policy explains our procedures for returns, exchanges, and refunds. Please read this policy carefully before making a purchase.
+              At Crumblecut, we want you to be completely satisfied with your purchase. This Return & Refund Policy explains our procedures for returns, exchanges, and refunds. Please read this policy carefully before making a purchase.
             </p>
           </section>
 
