@@ -185,7 +185,7 @@ const Footer = () => {
             © {currentYear} <span className="font-semibold text-white">Crumblecut</span>. All rights reserved.
           </p>
           <p className="text-xs text-gray-400 mb-2">
-            GSTIN: 27ABCDE1234F1Z5 | CIN: U74999MH2020PTC123456
+            GSTIN: 27AAOCC3207A1Z3 | CIN: U47912MH2026PTC476527
           </p>
           <div className="flex justify-center space-x-4 text-xs text-gray-400">
             <Link to="/privacy" onClick={scrollToTop} className="hover:text-rose-500 transition-colors duration-200">

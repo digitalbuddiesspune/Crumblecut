@@ -1,7 +1,7 @@
-export const COMPANY_NAME = 'KAVYANSH ENTREPRISES PRIVATE LIMITED';
-export const GSTIN = '07AAKCK9401A1ZT';
-export const CIN = 'U47912UP2024PTC200410';
+export const COMPANY_NAME = 'CRUMBLECUT PRIVATE LIMITED';
+export const GSTIN = '27AAOCC3207A1Z3';
+export const CIN = 'U47912MH2026PTC476527';
 export const ADDRESS =
-  'SHOP NO 310, PLOT NO 3, VARDHMAN PLAZA TOWER, DISTT CENTRE, Netaji Subhash Place Road, Pitampura, New Delhi, 110034';
-export const EMAILS = ['support@crumblecut.in', 'kavyanshentreprises@gmail.com'];
+  'UNIT 8, Off Veera Desai Road, Andheri IND East, Mumbai, Mumbai Suburban, Maharashtra - 400053';
+export const EMAILS = ['support@crumblecut.in'];
 export const PHONE = '+91 9355618308';

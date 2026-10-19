@@ -94,11 +94,11 @@ export const defaultPrivacyPolicy = {
 <section>
 <h2>10. Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, please contact us:</p>
-<p><strong>Email:</strong> support@crumblecut.in, kavyanshentreprises@gmail.com</p>
+<p><strong>Email:</strong> support@crumblecut.in</p>
 <p><strong>Phone:</strong> +91 9355618308</p>
-<p><strong>Company Name:</strong> KAVYANSH ENTREPRISES PRIVATE LIMITED</p>
-<p><strong>GSTIN:</strong> 07AAKCK9401A1ZT</p>
-<p><strong>CIN:</strong> U47912UP2024PTC200410</p>
-<p><strong>Address:</strong> SHOP NO 310, PLOT NO 3, VARDHMAN PLAZA TOWER, DISTT CENTRE, Netaji Subhash Place Road, Pitampura, New Delhi, 110034</p>
+<p><strong>Company Name:</strong> CRUMBLECUT PRIVATE LIMITED</p>
+<p><strong>GSTIN:</strong> 27AAOCC3207A1Z3</p>
+<p><strong>CIN:</strong> U47912MH2026PTC476527</p>
+<p><strong>Address:</strong> UNIT 8, Off Veera Desai Road, Andheri IND East, Mumbai, Mumbai Suburban, Maharashtra - 400053</p>
 </section>`,
 };
