@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { searchProducts } from '../services/api';
-import logo from '../assets/Logo.png';
+import logo from '../assets/CRUMBLECUT Red Geometric Wordmark.png';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
