@@ -37,19 +37,21 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="flex items-start space-x-4 p-6 bg-white border-2 border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-              <div className="text-3xl text-amber-600">📞</div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Phone</h3>
-                <p className="text-gray-700">
-                  <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="hover:text-amber-600 transition-colors">
-                    {PHONE}
-                  </a>
-                </p>
+            {PHONE && (
+              <div className="flex items-start space-x-4 p-6 bg-white border-2 border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div className="text-3xl text-amber-600">📞</div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Phone</h3>
+                  <p className="text-gray-700">
+                    <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="hover:text-amber-600 transition-colors">
+                      {PHONE}
+                    </a>
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="flex items-start space-x-4 p-6 bg-white border-2 border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 md:col-span-2">
+            <div className={`flex items-start space-x-4 p-6 bg-white border-2 border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${PHONE ? 'md:col-span-2' : ''}`}>
               <div className="text-3xl text-amber-600">📍</div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Address</h3>

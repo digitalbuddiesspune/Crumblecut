@@ -4,4 +4,4 @@ export const CIN = 'U47912MH2026PTC476527';
 export const ADDRESS =
   'UNIT 8, Off Veera Desai Road, Andheri IND East, Mumbai, Mumbai Suburban, Maharashtra - 400053';
 export const EMAILS = ['support@crumblecut.in'];
-export const PHONE = '+91 9355618308';
+export const PHONE = '';

@@ -95,7 +95,6 @@ export const defaultPrivacyPolicy = {
 <h2>10. Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, please contact us:</p>
 <p><strong>Email:</strong> support@crumblecut.in</p>
-<p><strong>Phone:</strong> +91 9355618308</p>
 <p><strong>Company Name:</strong> CRUMBLECUT PRIVATE LIMITED</p>
 <p><strong>GSTIN:</strong> 27AAOCC3207A1Z3</p>
 <p><strong>CIN:</strong> U47912MH2026PTC476527</p>

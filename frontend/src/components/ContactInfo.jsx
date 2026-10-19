@@ -17,12 +17,14 @@ const ContactInfo = ({ title = 'Contact Us', intro }) => {
             </span>
           ))}
         </p>
-        <p className="text-gray-700">
-          <strong>Phone:</strong>{' '}
-          <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="text-amber-700 hover:underline">
-            {PHONE}
-          </a>
-        </p>
+        {PHONE && (
+          <p className="text-gray-700">
+            <strong>Phone:</strong>{' '}
+            <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="text-amber-700 hover:underline">
+              {PHONE}
+            </a>
+          </p>
+        )}
         <p className="text-gray-700">
           <strong>Company Name:</strong> {COMPANY_NAME}
         </p>
