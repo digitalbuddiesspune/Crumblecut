@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../utils/api';
 import { getMyAddress, getMyOrders } from '../services/api';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { FiSettings, FiUser, FiPackage, FiMapPin, FiLogOut, FiRefreshCw, FiShoppingBag, FiMail, FiPhone, FiEdit2, FiHeart, FiHome } from 'react-icons/fi';
+import { FiSettings, FiUser, FiPackage, FiMapPin, FiLogOut, FiRefreshCw, FiShoppingBag, FiMail, FiPhone, FiEdit2, FiHeart, FiHome, FiFileText } from 'react-icons/fi';
+import Invoice from '../components/Invoice';
 
 export default function Profile() {
   const initialTab = (() => {
@@ -31,6 +32,7 @@ export default function Profile() {
   const [loadingAddresses, setLoadingAddresses] = useState(false);
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [selectedOrderForInvoice, setSelectedOrderForInvoice] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -539,7 +541,15 @@ export default function Profile() {
                                 <div className="text-xs text-gray-500 mb-1">Order ID</div>
                                 <div className="font-mono font-semibold text-gray-900">#{String(order._id).slice(-8).toUpperCase()}</div>
                               </div>
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                                <button
+                                  onClick={() => setSelectedOrderForInvoice(order)}
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg text-xs font-semibold text-gray-800 transition-colors shadow-2xs cursor-pointer"
+                                  title="View / Download Tax Invoice"
+                                >
+                                  <FiFileText className="w-3.5 h-3.5 text-blue-600" />
+                                  <span>Invoice</span>
+                                </button>
                                 <StatusBadge status={order.status || order.orderStatus} />
                                 <div className="text-lg font-bold text-gray-900">₹{Number(order.amount || 0).toLocaleString('en-IN')}</div>
                               </div>
@@ -658,6 +668,25 @@ export default function Profile() {
           </div>
         </main>
       </div>
+
+      {/* Invoice Modal Preview */}
+      {selectedOrderForInvoice && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm overflow-y-auto p-2 sm:p-4 md:p-6 flex justify-center items-start"
+          onClick={() => setSelectedOrderForInvoice(null)}
+        >
+          <div 
+            className="max-w-4xl w-full my-auto sm:my-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Invoice
+              order={selectedOrderForInvoice}
+              user={user}
+              onClose={() => setSelectedOrderForInvoice(null)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
   verifyAirpayOrder,
   verifyIpnSecureHash,
 } from '../services/airpay.service.js';
+import { sendOrderInvoiceEmail } from '../services/invoiceEmail.service.js';
 
 function buildCartItems(cart) {
   return cart.items.map((i) => {
@@ -227,6 +228,10 @@ async function fulfillPendingPayment(pending, { apTransactionId, transactionId, 
   }
 
   console.log('Airpay order placed:', order._id.toString(), 'orderid=', pending.orderid);
+  // Send invoice email asynchronously
+  sendOrderInvoiceEmail(order._id).catch((err) =>
+    console.error('[Invoice Email Error]:', err?.message || err)
+  );
   return order;
 }
 
@@ -532,6 +537,10 @@ export const createCODOrder = async (req, res) => {
     await cart.save();
 
     console.log('COD Order created successfully:', order._id);
+    // Send invoice email asynchronously
+    sendOrderInvoiceEmail(order._id).catch((err) =>
+      console.error('[Invoice Email Error]:', err?.message || err)
+    );
     return res.json({ success: true, order });
   } catch (err) {
     console.error('Create COD order error:', err?.message || err);

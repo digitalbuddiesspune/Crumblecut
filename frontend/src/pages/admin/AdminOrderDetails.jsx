@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FiFileText } from 'react-icons/fi';
 import { api } from '../../utils/api';
+import Invoice from '../../components/Invoice';
 
 const ORDER_STATUS_OPTIONS = [
   { value: 'pending', label: 'Pending' },
@@ -62,6 +64,7 @@ const AdminOrderDetails = () => {
   const [paymentStatusDraft, setPaymentStatusDraft] = useState('');
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
+  const [showInvoice, setShowInvoice] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -147,6 +150,13 @@ const AdminOrderDetails = () => {
       <div className="flex items-center justify-between">
         <button onClick={() => navigate(-1)} className="px-3 py-1.5 rounded border text-sm">Back</button>
         <div className="flex gap-2">
+          <button
+            onClick={() => setShowInvoice(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm text-blue-700 border-blue-200 bg-blue-50 hover:bg-blue-100 font-medium cursor-pointer"
+          >
+            <FiFileText className="w-4 h-4" />
+            <span>Tax Invoice</span>
+          </button>
           <button onClick={() => quickAction('cancel')} className="px-3 py-1.5 rounded border text-sm text-rose-600 border-rose-200 hover:bg-rose-50" disabled={saving}>Cancel</button>
           <button onClick={() => quickAction('refund')} className="px-3 py-1.5 rounded border text-sm text-blue-600 border-blue-200 hover:bg-blue-50" disabled={saving}>Refund</button>
         </div>
@@ -291,6 +301,24 @@ const AdminOrderDetails = () => {
         <div className="flex justify-between text-sm"><span>Shipping</span><span>₹0</span></div>
         <div className="flex justify-between text-base font-semibold border-t pt-2"><span>Total</span><span>{formatINR(total)}</span></div>
       </div>
+
+      {showInvoice && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm overflow-y-auto p-2 sm:p-4 md:p-6 flex justify-center items-start"
+          onClick={() => setShowInvoice(false)}
+        >
+          <div 
+            className="max-w-4xl w-full my-auto sm:my-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Invoice
+              order={order}
+              user={order.user}
+              onClose={() => setShowInvoice(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

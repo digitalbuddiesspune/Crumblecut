@@ -42,6 +42,9 @@ export const api = {
       return await request('/auth/me', { method: 'GET' });
     }
   },
+  // Orders endpoints
+  getMyOrders: () => request('/orders', { method: 'GET' }),
+  getOrder: (id) => request(`/orders/${id}`, { method: 'GET' }),
   // Cart endpoints
   getCart: () => request('/cart', { method: 'GET' }),
   addToCart: ({ productId, quantity = 1, size }) => request('/cart/add', { method: 'POST', body: JSON.stringify({ productId, quantity, size }) }),

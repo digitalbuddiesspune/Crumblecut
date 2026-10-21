@@ -74,6 +74,7 @@ const OrderSchema = new mongoose.Schema(
     airpayOrderId: { type: String, index: true },
     airpayTransactionId: { type: String },
     shippingAddress: { type: ShippingAddressSchema },
+    invoiceEmailSentAt: { type: Date },
   },
   { timestamps: true }
 );

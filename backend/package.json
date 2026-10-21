@@ -12,7 +12,6 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "nodemon index.js"
-    
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
@@ -31,6 +30,7 @@
     "nodemailer": "^7.0.10",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "resend": "^6.34.1"
   }
 }

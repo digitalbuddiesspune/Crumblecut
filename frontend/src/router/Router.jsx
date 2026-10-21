@@ -31,6 +31,7 @@ import AdminOrderDetails from '../pages/admin/AdminOrderDetails';
 import AdminPolicies from '../pages/admin/AdminPolicies';
 import AdminLogoSettings from '../pages/admin/AdminLogoSettings';
 import AdminHeroSlider from '../pages/admin/AdminHeroSlider';
+import AdminInvoiceGenerator from '../pages/admin/AdminInvoiceGenerator';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfService from '../pages/TermsOfService';
 import ShippingPolicy from '../pages/ShippingPolicy';
@@ -139,6 +140,7 @@ const Router = () => {
           <Route path="policies" element={<AdminPolicies />} />
           <Route path="logo" element={<AdminLogoSettings />} />
           <Route path="hero-slider" element={<AdminHeroSlider />} />
+          <Route path="invoices" element={<AdminInvoiceGenerator />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
