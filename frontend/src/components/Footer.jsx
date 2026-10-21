@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import logo from '../assets/CRUMBLECUT Red Geometric Wordmark.png';
+import { CIN, EMAILS, GSTIN, PHONE } from '../constants/companyInfo';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -184,9 +185,25 @@ const Footer = () => {
           <p className="text-gray-300 text-xs mb-1">
             © {currentYear} <span className="font-semibold text-white">Crumblecut</span>. All rights reserved.
           </p>
-          <p className="text-xs text-gray-400 mb-2">
-            GSTIN: 27AAOCC3207A1Z3 | CIN: U47912MH2026PTC476527
+          <p className="text-xs text-gray-400 mb-1">
+            GSTIN: {GSTIN} | CIN: {CIN}
           </p>
+          <p className="text-xs text-gray-400 mb-2">
+            <span>Email: </span>
+            <a href={`mailto:${EMAILS[0]}`} className="hover:text-white transition-colors">
+              {EMAILS[0]}
+            </a>
+            {PHONE && (
+              <>
+                <span className="mx-2">|</span>
+                <span>Phone: </span>
+                <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
+                  {PHONE}
+                </a>
+              </>
+            )}
+          </p>
+
           <div className="flex justify-center space-x-4 text-xs text-gray-400">
             <Link to="/privacy" onClick={scrollToTop} className="hover:text-rose-500 transition-colors duration-200">
               Privacy Policy
