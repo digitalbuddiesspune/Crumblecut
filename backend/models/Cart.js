@@ -7,7 +7,7 @@ const CartItemSchema = new mongoose.Schema(
     price: { type: Number },
     size: { type: String }, // Selected size (e.g., "5", "6", "7", "8", "9", "10", "S", "M", "L", "30", "32", etc.)
   },
-  { _id: false }
+  { _id: true }
 );
 
 const CartSchema = new mongoose.Schema(

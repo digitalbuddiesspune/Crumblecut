@@ -20,12 +20,15 @@ export const CartProvider = ({ children }) => {
         : (typeof p.mrp === 'number' ? Math.round(p.mrp - (p.mrp * (p.discountPercent || 0) / 100)) : 0);
       return {
         id: p._id, // used by UI and for remove
+        itemId: i._id || `${p._id}_${i.size || 'default'}`,
+        cartItemId: i._id,
         name: p.title,
         image: p.images?.image1,
         material: p.product_info?.SareeMaterial,
         work: p.product_info?.IncludedComponents,
         brand: p.product_info?.brand,
         color: p.product_info?.KurtiColor || p.product_info?.SareeColor,
+        size: i.size || null,
         price,
         originalPrice: p.mrp,
         quantity: i.quantity || 1,
@@ -38,8 +41,12 @@ export const CartProvider = ({ children }) => {
       setCart([]);
       return;
     }
-    const data = await api.getCart();
-    setCart(mapServerCartToUI(data));
+    try {
+      const data = await api.getCart();
+      setCart(mapServerCartToUI(data));
+    } catch (err) {
+      console.error('Failed to load cart:', err);
+    }
   }, [mapServerCartToUI]);
 
   const requireAuth = useCallback(() => {
@@ -58,41 +65,59 @@ export const CartProvider = ({ children }) => {
     if (typeof productIdOrObj === 'object' && productIdOrObj) {
       productId = productIdOrObj._id || productIdOrObj.id;
     }
-    await api.addToCart({ productId, quantity, size });
+    const cleanSize = size ? String(size).trim() : null;
+    await api.addToCart({ productId, quantity, size: cleanSize });
     await loadCart();
   }, [requireAuth, loadCart]);
 
-  const removeFromCart = useCallback(async (productId) => {
+  const removeFromCart = useCallback(async (productId, size = null, itemId = null) => {
     if (!requireAuth()) return;
-    await api.removeFromCart(productId);
-    await loadCart();
-  }, [requireAuth, loadCart]);
+    setCart((prevCart) =>
+      prevCart.filter((item) => {
+        if (itemId && ((item.cartItemId && item.cartItemId === itemId) || item.itemId === itemId)) return false;
+        if (!itemId && item.id === productId && (!size || (item.size || '').toLowerCase() === String(size).toLowerCase())) return false;
+        return true;
+      })
+    );
+    try {
+      const data = await api.removeFromCart(productId, size, itemId);
+      setCart(mapServerCartToUI(data));
+    } catch (err) {
+      console.error('Failed to remove from cart:', err);
+      await loadCart();
+    }
+  }, [requireAuth, mapServerCartToUI, loadCart]);
 
-  const updateQuantity = useCallback(async (productId, newQuantity) => {
+  const updateQuantity = useCallback(async (productId, newQuantity, size = null, itemId = null) => {
     if (!requireAuth()) return;
     if (newQuantity < 1) {
-      await removeFromCart(productId);
+      await removeFromCart(productId, size, itemId);
       return;
     }
-    const current = cart.find(i => i.id === productId)?.quantity || 0;
-    const delta = newQuantity - current;
-    if (delta === 0) return;
-    if (delta > 0) {
-      await api.addToCart({ productId, quantity: delta });
-      await loadCart();
-    } else {
-      // Simulate decrement: remove then add desired quantity
-      await api.removeFromCart(productId);
-      await api.addToCart({ productId, quantity: newQuantity });
+
+    // Immediate optimistic update in UI so quantity responds with zero lag
+    setCart((prevCart) =>
+      prevCart.map((item) => {
+        const isMatch = itemId
+          ? (item.cartItemId && item.cartItemId === itemId) || item.itemId === itemId
+          : (item.id === productId && (!size || (item.size || '').toLowerCase() === String(size).toLowerCase()));
+        return isMatch ? { ...item, quantity: newQuantity } : item;
+      })
+    );
+
+    try {
+      const data = await api.updateCartQuantity({ productId, quantity: newQuantity, size, itemId });
+      setCart(mapServerCartToUI(data));
+    } catch (err) {
+      console.error('Failed to update cart quantity:', err);
       await loadCart();
     }
-  }, [requireAuth, removeFromCart, cart, loadCart]);
+  }, [requireAuth, removeFromCart, mapServerCartToUI, loadCart]);
 
   const clearCart = useCallback(async () => {
-    // No dedicated clear endpoint; remove each item
     if (!requireAuth()) return;
     for (const item of cart) {
-      await api.removeFromCart(item.id);
+      await api.removeFromCart(item.id, item.size, item.cartItemId);
     }
     await loadCart();
   }, [requireAuth, cart, loadCart]);

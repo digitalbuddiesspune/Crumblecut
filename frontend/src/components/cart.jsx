@@ -20,11 +20,11 @@ function Cart() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const handleQuantityChange = (itemId, newQuantity) => {
+  const handleQuantityChange = (item, newQuantity) => {
     if (newQuantity < 1) {
-      removeFromCart(itemId);
+      removeFromCart(item.id, item.size, item.cartItemId || item.itemId);
     } else {
-      updateQuantity(itemId, newQuantity);
+      updateQuantity(item.id, newQuantity, item.size, item.cartItemId || item.itemId);
     }
   };
 
@@ -72,7 +72,7 @@ function Cart() {
             {/* Product Listings - Left Side */}  
             <div className="lg:col-span-2 space-y-4">
               {cart.map((item) => (
-                <div key={item.id} className="bg-white rounded-lg shadow-sm p-4">
+                <div key={item.cartItemId || item.itemId || `${item.id}_${item.size || 'default'}`} className="bg-white rounded-lg shadow-sm p-4">
                   <div className="flex gap-4">
                     {/* Product Image */}
                     <div className="w-24 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
@@ -95,9 +95,14 @@ function Cart() {
                       {item.brand && (
                         <p className="text-sm text-blue-600 mb-1">{item.brand}</p>
                       )}
-                      {item.color && (
-                        <p className="text-xs text-gray-500 mb-2">Color: {item.color}</p>
-                      )}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mb-2">
+                        {item.color && <span>Color: {item.color}</span>}
+                        {item.size && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded bg-gray-100 text-gray-800 font-medium">
+                            Size: {item.size}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-base font-bold text-gray-900">₹{(item.price * (item.quantity || 1)).toLocaleString()}</p>
                       
                       {/* Quantity, Delete */}
@@ -105,15 +110,17 @@ function Cart() {
                         {/* Quantity Selector */}
                         <div className="flex items-center border border-gray-300 rounded-md">
                           <button 
-                            onClick={() => handleQuantityChange(item.id, (item.quantity || 1) - 1)}
+                            onClick={() => handleQuantityChange(item, (item.quantity || 1) - 1)}
                             className="px-2 py-1 text-gray-600 hover:bg-gray-100 cursor-pointer"
+                            aria-label="Decrease quantity"
                           >
                             <FaMinus className="w-3 h-3" />
                           </button>
-                          <span className="px-3 py-1 border-x border-gray-300 text-sm">{item.quantity || 1}</span>
+                          <span className="px-3 py-1 border-x border-gray-300 text-sm font-semibold">{item.quantity || 1}</span>
                           <button 
-                            onClick={() => handleQuantityChange(item.id, (item.quantity || 1) + 1)}
+                            onClick={() => handleQuantityChange(item, (item.quantity || 1) + 1)}
                             className="px-2 py-1 text-gray-600 hover:bg-gray-100 cursor-pointer"
+                            aria-label="Increase quantity"
                           >
                             <FaPlus className="w-3 h-3" />
                           </button>
@@ -121,8 +128,10 @@ function Cart() {
                         
                         {/* Delete Icon */}
                         <button
-                          onClick={() => removeFromCart(item.id)}
-                          className="text-gray-500 hover:text-red-500 cursor-pointer"
+                          onClick={() => removeFromCart(item.id, item.size, item.cartItemId || item.itemId)}
+                          className="text-gray-500 hover:text-red-500 cursor-pointer p-1"
+                          title="Remove item"
+                          aria-label="Remove item"
                         >
                           <FaTrash className="w-4 h-4" />
                         </button>

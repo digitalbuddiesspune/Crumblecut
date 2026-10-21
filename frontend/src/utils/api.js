@@ -48,7 +48,14 @@ export const api = {
   // Cart endpoints
   getCart: () => request('/cart', { method: 'GET' }),
   addToCart: ({ productId, quantity = 1, size }) => request('/cart/add', { method: 'POST', body: JSON.stringify({ productId, quantity, size }) }),
-  removeFromCart: (productId) => request(`/cart/remove/${productId}`, { method: 'DELETE' }),
+  updateCartQuantity: ({ productId, quantity, size, itemId }) => request('/cart/quantity', { method: 'PUT', body: JSON.stringify({ productId, quantity, size, itemId }) }),
+  removeFromCart: (productId, size, itemId) => {
+    const params = new URLSearchParams();
+    if (size) params.append('size', size);
+    if (itemId) params.append('itemId', itemId);
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return request(`/cart/remove/${productId}${query}`, { method: 'DELETE' });
+  },
   // Admin endpoints
   admin: {
     stats: () => request('/admin/stats', { method: 'GET' }),
