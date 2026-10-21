@@ -45,12 +45,50 @@ export const INVOICE_EXPORT_CSS = `
 .invoice-export-footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid #F3F4F6; text-align: center; font-size: 10px; color: #6B7280; }
 
 @media print {
-  @page { size: A4; margin: 10mm; }
-  body * { visibility: hidden !important; }
-  #admin-invoice-print-root, #admin-invoice-print-root * { visibility: visible !important; }
-  #admin-invoice-print-root { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; }
-  .invoice-export { min-height: auto !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; }
-  .invoice-export-block, .invoice-export-totals-box, .invoice-export-table tr { page-break-inside: avoid; }
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+  .invoice-export,
+  .invoice-export *,
+  #admin-invoice-print-root,
+  #admin-invoice-print-root * {
+    visibility: visible !important;
+  }
+  .invoice-export,
+  #admin-invoice-print-root {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    display: block !important;
+    z-index: 999999 !important;
+    opacity: 1 !important;
+  }
+  .invoice-export-block,
+  .invoice-export-totals-box,
+  .invoice-export-table tr,
+  .invoice-export-bottom-grid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
 }
 `;
 

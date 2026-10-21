@@ -3,6 +3,7 @@ import { FiDownload, FiPrinter, FiX, FiCheckCircle } from 'react-icons/fi';
 import { COMPANY_INFO } from '../config/companyInfo';
 import { INVOICE_EXPORT_CSS } from '../utils/invoiceExportStyles';
 import { downloadInvoicePdf } from '../utils/downloadInvoicePdf';
+import { printInvoice } from '../utils/printInvoice';
 import logoImg from '../assets/CRUMBLECUT Red Geometric Wordmark.png';
 
 const formatINR = (val) => `₹${Number(val || 0).toLocaleString('en-IN')}`;
@@ -114,6 +115,8 @@ export default function Invoice({
   const handlePrint = () => {
     if (onPrint) {
       onPrint();
+    } else if (exportRef.current) {
+      printInvoice(exportRef.current);
     } else {
       window.print();
     }

@@ -16,6 +16,7 @@ import {
 import { api } from '../../utils/api';
 import Invoice from '../../components/Invoice';
 import { downloadInvoicePdf } from '../../utils/downloadInvoicePdf';
+import { printInvoice } from '../../utils/printInvoice';
 
 export default function AdminInvoiceGenerator() {
   const invoiceRef = useRef(null);
@@ -236,7 +237,11 @@ export default function AdminInvoiceGenerator() {
 
   // Actions
   const handlePrint = () => {
-    window.print();
+    if (invoiceRef.current) {
+      printInvoice(invoiceRef.current);
+    } else {
+      window.print();
+    }
   };
 
   const handleDownload = async () => {
