@@ -16,7 +16,18 @@ router.get('/:type', async (req, res) => {
     const policy = await Policy.findOne({ type: type.toLowerCase() });
     
     if (!policy) {
-      return res.status(404).json({ message: 'Policy not found' });
+      const titles = {
+        privacy: 'Privacy Policy',
+        terms: 'Terms of Service',
+        shipping: 'Shipping Policy',
+        returns: 'Return & Refund Policy',
+      };
+      return res.json({
+        type: type.toLowerCase(),
+        title: titles[type.toLowerCase()] || 'Policy',
+        content: '',
+        isDefault: true,
+      });
     }
 
     return res.json(policy);

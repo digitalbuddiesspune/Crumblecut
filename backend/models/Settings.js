@@ -20,9 +20,6 @@ const settingsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Ensure only one document exists per key
-settingsSchema.index({ key: 1 }, { unique: true });
-
 const Settings = mongoose.models.Settings || mongoose.model('Settings', settingsSchema);
 export default Settings;
 export { Settings };

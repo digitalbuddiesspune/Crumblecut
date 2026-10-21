@@ -4,6 +4,7 @@ import { createOrUpdateAddress, getMyAddress, getAddressByUser, updateAddress, d
 
 const router = Router();
 
+router.get('/', auth, getMyAddress);
 router.get('/me', auth, getMyAddress);
 router.post('/', auth, createOrUpdateAddress);
 router.get('/:userId', auth, getAddressByUser);

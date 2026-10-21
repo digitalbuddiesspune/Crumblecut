@@ -1,4 +1,16 @@
+import mongoose from 'mongoose';
 import { Product } from '../models/product.js';
+
+export const getCategories = async (req, res) => {
+  try {
+    const categories = await Product.distinct('category');
+    const filtered = categories.filter(Boolean);
+    return res.json(filtered);
+  } catch (err) {
+    console.error('Error fetching categories:', err);
+    return res.status(500).json({ message: 'Error fetching categories', error: err.message });
+  }
+};
 
 
 // Category mapping for URL slugs to database category names
@@ -141,7 +153,12 @@ export const getProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
-    let product = await Product.findById(req.params.id);
+    const { id } = req.params;
+    if (!id || !mongoose.isValidObjectId(id)) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    let product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
