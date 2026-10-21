@@ -185,21 +185,25 @@ const Footer = () => {
           <p className="text-gray-300 text-xs mb-1">
             © {currentYear} <span className="font-semibold text-white">Crumblecut</span>. All rights reserved.
           </p>
-          <p className="text-xs text-gray-400 mb-1">
-            GSTIN: {GSTIN} | CIN: {CIN}
+          <p className="text-xs text-gray-400 mb-1 px-4 break-words">
+            GSTIN: {GSTIN} <span className="hidden sm:inline">|</span><br className="sm:hidden" /> CIN: {CIN}
           </p>
-          <p className="text-xs text-gray-400 mb-2">
-            <span>Email: </span>
-            <a href={`mailto:${EMAILS[0]}`} className="hover:text-white transition-colors">
-              {EMAILS[0]}
-            </a>
+          <p className="text-xs text-gray-400 mb-2 flex flex-wrap justify-center items-center gap-x-2 gap-y-1 px-4">
+            <span className="break-all sm:break-normal">
+              Email:{' '}
+              <a href={`mailto:${EMAILS[0]}`} className="hover:text-white transition-colors">
+                {EMAILS[0]}
+              </a>
+            </span>
             {PHONE && (
               <>
-                <span className="mx-2">|</span>
-                <span>Phone: </span>
-                <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
-                  {PHONE}
-                </a>
+                <span className="hidden sm:inline text-gray-600">|</span>
+                <span className="break-all sm:break-normal">
+                  Phone:{' '}
+                  <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
+                    {PHONE}
+                  </a>
+                </span>
               </>
             )}
           </p>
