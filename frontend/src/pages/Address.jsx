@@ -71,7 +71,7 @@ export default function AddressForm() {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [showForm, setShowForm] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' or 'cod'
+  const [paymentMethod, setPaymentMethod] = useState('cod'); // Only 'cod'
   const [processingOrder, setProcessingOrder] = useState(false);
   const [upiPayment, setUpiPayment] = useState(null); // { orderid, qrcode_string, amount, ap_transactionid }
   const [upiStatus, setUpiStatus] = useState(''); // waiting | checking | success
@@ -216,70 +216,35 @@ export default function AddressForm() {
     }
     
     try {
-      // Handle Cash on Delivery
-      if (paymentMethod === 'cod') {
-        setProcessingOrder(true);
-        const startTime = Date.now();
-        console.log('Placing COD order...');
-        const result = await createCODOrder();
-        console.log('COD order result:', result);
-        
-        // Ensure loader shows for at least 2 seconds
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 2000 - elapsedTime);
-        
-        if (result && result.success) {
-          await new Promise(resolve => setTimeout(resolve, remainingTime));
-          await loadCart();
-          // Navigate to success page with order details
-          navigate('/order/success', {
-            state: {
-              orderId: result.order?._id || result.order?.id,
-              orderNumber: result.order?.orderNumber || null,
-            }
-          });
-        } else {
-          await new Promise(resolve => setTimeout(resolve, remainingTime));
-          setProcessingOrder(false);
-          alert(result?.error || 'Failed to place COD order. Please try again.');
-        }
-        return;
-      }
-
-      // Online payment — Airpay UPI intent + auto status fetch
       setProcessingOrder(true);
-      const amount = priceDetails.total;
-      const payment = await createPaymentOrder(amount, {
-        name: formData.name,
-        mobile: formData.mobile,
-        city: formData.city,
-        email: formData.email,
-      });
-
-      if (!payment?.qrcode_string || !payment?.orderid) {
+      const startTime = Date.now();
+      console.log('Placing COD order...');
+      const result = await createCODOrder();
+      console.log('COD order result:', result);
+      
+      // Ensure loader shows for at least 2 seconds
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, 2000 - elapsedTime);
+      
+      if (result && result.success) {
+        await new Promise(resolve => setTimeout(resolve, remainingTime));
+        await loadCart();
+        // Navigate to success page with order details
+        navigate('/order/success', {
+          state: {
+            orderId: result.order?._id || result.order?.id,
+            orderNumber: result.order?.orderNumber || null,
+          }
+        });
+      } else {
+        await new Promise(resolve => setTimeout(resolve, remainingTime));
         setProcessingOrder(false);
-        alert(payment?.error || 'Unable to start UPI payment. Please try again.');
-        return;
+        alert(result?.error || 'Failed to place COD order. Please try again.');
       }
-
-      setUpiPayment(payment);
-      setProcessingOrder(false);
-      // Mobile: open UPI app. Desktop: show QR to scan from phone.
-      if (isMobileDevice) {
-        openUpiApp(payment.qrcode_string);
-      }
-      // Auto-confirm when paid (poll + IPN) — no manual confirm
-      startUpiPolling(payment);
     } catch (e) {
       setProcessingOrder(false);
-      const errorMessage = e?.message || e?.error || 'Unable to process payment. Please try again.';
-      console.error('Payment error details:', {
-        message: e?.message,
-        error: e?.error,
-        name: e?.name,
-        stack: e?.stack,
-        fullError: e
-      });
+      const errorMessage = e?.message || e?.error || 'Unable to place COD order. Please try again.';
+      console.error('COD order error details:', e);
       alert(errorMessage);
     }
   };
@@ -561,14 +526,10 @@ export default function AddressForm() {
               </div>
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {paymentMethod === 'cod' ? 'Placing Your Order...' : 'Starting secure payment...'}
+              Placing Your Order...
             </h3>
             <p className="text-gray-600 text-sm">
-              {paymentMethod === 'cod' 
-                ? 'Please wait while we process your order. This may take a few seconds.'
-                : isMobileDevice
-                  ? 'Opening UPI and preparing auto confirmation.'
-                  : 'Preparing UPI QR for payment.'}
+              Please wait while we process your Cash on Delivery order. This may take a few seconds.
             </p>
             <div className="mt-6 flex items-center justify-center gap-2">
               <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
@@ -930,38 +891,22 @@ export default function AddressForm() {
               <span>₹{priceDetails.total.toLocaleString()}</span>
             </div>
 
-            {/* Payment Method Selection */}
+            {/* Payment Method Selection - COD Only */}
             <div className="mb-4 pb-4 border-b">
               <h3 className="text-gray-500 text-sm font-medium mb-3">PAYMENT METHOD</h3>
-              <div className="space-y-2">
-                <label className="flex items-center gap-3 p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="online"
-                    checked={paymentMethod === 'online'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-4 h-4 text-black focus:ring-black"
-                  />
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-gray-900">Online Payment (UPI)</span>
-                    <p className="text-xs text-gray-500">Pay via UPI — order confirms automatically</p>
+              <div className="p-3.5 border-2 border-black rounded-lg bg-gray-50 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+                    </svg>
                   </div>
-                </label>
-                <label className="flex items-center gap-3 p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cod"
-                    checked={paymentMethod === 'cod'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-4 h-4 text-black focus:ring-black"
-                  />
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-gray-900">Cash on Delivery</span>
-                    <p className="text-xs text-gray-500">Pay when you receive your order</p>
+                  <div>
+                    <span className="text-sm font-semibold text-gray-900">Cash on Delivery (COD)</span>
+                    <p className="text-xs text-gray-500">Pay in cash or UPI upon delivery</p>
                   </div>
-                </label>
+                </div>
+                <span className="text-xs font-semibold px-2 py-0.5 bg-green-100 text-green-800 rounded">Available</span>
               </div>
             </div>
 
@@ -980,10 +925,10 @@ export default function AddressForm() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  {paymentMethod === 'cod' ? 'Placing Order...' : 'Processing...'}
+                  Placing Order...
                 </span>
               ) : (
-                paymentMethod === 'cod' ? 'PLACE ORDER' : 'PROCEED TO PAYMENT'
+                'PLACE ORDER (COD)'
               )}
             </button>
           </div>
