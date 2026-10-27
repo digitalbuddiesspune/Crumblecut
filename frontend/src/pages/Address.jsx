@@ -2,6 +2,7 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getMyAddress, saveMyAddress, deleteAddressById, createPaymentOrder, verifyPayment, createCODOrder } from '../services/api';
+import { calculateShippingCharge, isMetroLocation } from '../utils/shipping';
 
 const indianStates = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -87,7 +88,11 @@ export default function AddressForm() {
   // Calculate price details
   const calculatePriceDetails = () => {
     const subtotal = total || 0;
-    const shippingCharge = subtotal < 5000 ? 99 : 0;
+    // Shipping charge: Free above ₹1,000. Under ₹1,000: Metro ₹99, Other ₹149.
+    const shippingCharge = calculateShippingCharge(subtotal, {
+      city: formData.city,
+      state: formData.state,
+    });
     const tax = Math.round(subtotal * 0.05); // 5% tax
     const totalPayable = subtotal + shippingCharge + tax;
     const savings = Math.round(subtotal * 0.35); // Assuming 35% savings
@@ -101,7 +106,8 @@ export default function AddressForm() {
       savings,
       supercoins,
       items: cart?.length || 0,
-      cartItems: cart || []
+      cartItems: cart || [],
+      isMetro: isMetroLocation(formData.city, formData.state),
     };
   };
 
@@ -874,12 +880,23 @@ export default function AddressForm() {
                 <span>Price ({priceDetails.items} {priceDetails.items === 1 ? 'item' : 'items'})</span>
                 <span>₹{priceDetails.subtotal.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-sm items-center">
                 <span>Shipping</span>
-                <span className={priceDetails.shippingCharge > 0 ? 'text-gray-600' : 'text-green-600'}>
+                <span className={priceDetails.shippingCharge > 0 ? 'text-gray-900 font-medium' : 'text-green-600 font-semibold'}>
                   {priceDetails.shippingCharge > 0 ? `₹${priceDetails.shippingCharge.toLocaleString()}` : 'Free'}
                 </span>
               </div>
+              {priceDetails.shippingCharge > 0 ? (
+                <div className="text-[11px] text-gray-500 text-right -mt-2">
+                  {formData.city?.trim()
+                    ? (priceDetails.isMetro ? 'Standard Shipping (Metro: ₹99)' : 'Standard Shipping (Other Locations: ₹149)')
+                    : 'Free on orders above ₹1,000'}
+                </div>
+              ) : (
+                <div className="text-[11px] text-green-600 text-right -mt-2 font-medium">
+                  Free standard shipping (Order above ₹1,000)
+                </div>
+              )}
               <div className="flex justify-between text-sm">
                 <span>Tax (5%)</span>
                 <span>₹{priceDetails.tax.toLocaleString()}</span>

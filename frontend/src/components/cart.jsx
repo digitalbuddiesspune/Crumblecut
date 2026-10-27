@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaTrash, FaPlus, FaMinus, FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
+import { calculateShippingCharge } from '../utils/shipping';
 
 function Cart() {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ function Cart() {
     }
   };
 
-  const shippingCost = cartTotal >= 1000 ? 0 : 99;
+  // Base shipping estimate (Free above ₹1,000; starts at ₹99 for Metro, ₹149 for other)
+  const shippingCost = calculateShippingCharge(cartTotal, '');
   const tax = Math.round(cartTotal * 0.05);
   const total = cartTotal + shippingCost + tax;
 
@@ -151,9 +153,25 @@ function Cart() {
                     <span className="text-gray-900">₹{cartTotal.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Shipping & Tax</span>
-                    <span className="text-gray-900">₹{(shippingCost + tax).toLocaleString()}</span>
+                    <span className="text-gray-600">Shipping</span>
+                    <span className={shippingCost === 0 ? "text-green-600 font-semibold" : "text-gray-900"}>
+                      {shippingCost === 0 ? 'FREE' : `₹${shippingCost.toLocaleString()}*`}
+                    </span>
                   </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Tax (5%)</span>
+                    <span className="text-gray-900">₹{tax.toLocaleString()}</span>
+                  </div>
+                  {shippingCost === 0 ? (
+                    <div className="text-xs text-green-700 bg-green-50 p-2 rounded border border-green-200">
+                      🎉 You qualify for <strong>FREE Standard Shipping</strong>!
+                    </div>
+                  ) : (
+                    <div className="text-xs text-amber-800 bg-amber-50 p-2 rounded border border-amber-200">
+                      Add <strong>₹{(1000 - cartTotal).toLocaleString()}</strong> more to get <strong>FREE Standard Shipping</strong>!
+                      <div className="text-[10px] text-gray-500 mt-1">*₹99 for Metro, ₹149 for other locations.</div>
+                    </div>
+                  )}
                   <div className="flex justify-between text-base font-bold pt-2 border-t border-gray-200">
                     <span className="text-gray-900">Total</span>
                     <span className="text-gray-900">₹{total.toLocaleString()}</span>

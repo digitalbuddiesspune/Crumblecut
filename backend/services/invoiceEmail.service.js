@@ -57,6 +57,10 @@ function buildInvoiceEmailHtml(order, customerName) {
     order.paymentMethod || (order.airpayOrderId ? 'Airpay' : 'COD')
   ).toUpperCase();
 
+  const shippingCharge = Number(order.shippingCharge || 0);
+  const tax = Number(order.tax || 0);
+  const subtotal = Number(order.subtotal || Math.max(0, order.amount - shippingCharge - tax));
+
   return `
     <!DOCTYPE html>
     <html>
@@ -145,11 +149,16 @@ function buildInvoiceEmailHtml(order, customerName) {
                 <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                   <tr>
                     <td style="padding: 6px 0; color: #6b7280;">Subtotal:</td>
-                    <td style="padding: 6px 0; text-align: right; font-weight: 500; color: #111827;">${formatINR(order.amount)}</td>
+                    <td style="padding: 6px 0; text-align: right; font-weight: 500; color: #111827;">${formatINR(subtotal)}</td>
                   </tr>
+                  ${tax > 0 ? `
+                  <tr>
+                    <td style="padding: 6px 0; color: #6b7280;">Tax (5%):</td>
+                    <td style="padding: 6px 0; text-align: right; font-weight: 500; color: #111827;">${formatINR(tax)}</td>
+                  </tr>` : ''}
                   <tr>
                     <td style="padding: 6px 0; color: #6b7280;">Shipping:</td>
-                    <td style="padding: 6px 0; text-align: right; color: #15803d; font-weight: bold;">FREE</td>
+                    <td style="padding: 6px 0; text-align: right; color: ${shippingCharge > 0 ? '#111827' : '#15803d'}; font-weight: bold;">${shippingCharge > 0 ? formatINR(shippingCharge) : 'FREE'}</td>
                   </tr>
                   <tr style="border-top: 2px solid #111827;">
                     <td style="padding: 10px 0 0; font-weight: bold; font-size: 15px; color: #111827;">Total:</td>

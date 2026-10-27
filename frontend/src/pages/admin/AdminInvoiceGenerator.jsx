@@ -17,6 +17,7 @@ import { api } from '../../utils/api';
 import Invoice from '../../components/Invoice';
 import { downloadInvoicePdf } from '../../utils/downloadInvoicePdf';
 import { printInvoice } from '../../utils/printInvoice';
+import { calculateShippingCharge } from '../../utils/shipping';
 
 export default function AdminInvoiceGenerator() {
   const invoiceRef = useRef(null);
@@ -182,8 +183,8 @@ export default function AdminInvoiceGenerator() {
 
   const shippingAmount = useMemo(() => {
     if (customShipping !== '') return Number(customShipping) || 0;
-    return subtotal >= 500 ? 0 : 49;
-  }, [subtotal, customShipping]);
+    return calculateShippingCharge(subtotal, { city: customer.city, state: customer.state });
+  }, [subtotal, customShipping, customer.city, customer.state]);
 
   const grandTotal = subtotal + gstAmount + shippingAmount;
 

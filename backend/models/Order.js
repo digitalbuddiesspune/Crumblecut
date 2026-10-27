@@ -30,6 +30,9 @@ const OrderSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     items: { type: [OrderItemSchema], default: [] },
+    subtotal: { type: Number },
+    shippingCharge: { type: Number, default: 0 },
+    tax: { type: Number, default: 0 },
     amount: { type: Number, required: true },
     currency: { type: String, default: 'INR' },
     // Legacy status field (kept for backward compatibility). Accept broader enums so

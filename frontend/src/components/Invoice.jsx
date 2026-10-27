@@ -4,6 +4,7 @@ import { COMPANY_INFO } from '../config/companyInfo';
 import { INVOICE_EXPORT_CSS } from '../utils/invoiceExportStyles';
 import { downloadInvoicePdf } from '../utils/downloadInvoicePdf';
 import { printInvoice } from '../utils/printInvoice';
+import { calculateShippingCharge } from '../utils/shipping';
 import logoImg from '../assets/CRUMBLECUT Red Geometric Wordmark.png';
 
 const formatINR = (val) => `₹${Number(val || 0).toLocaleString('en-IN')}`;
@@ -93,9 +94,13 @@ export default function Invoice({
   });
 
   const calculatedSubtotal = items.reduce((acc, it) => acc + it.lineTotal, 0);
-  const subtotal = totals?.subtotal !== undefined ? totals.subtotal : calculatedSubtotal;
-  const gstAmount = totals?.gst !== undefined ? totals.gst : 0;
-  const shippingAmount = totals?.shipping !== undefined ? totals.shipping : (subtotal >= 500 ? 0 : 49);
+  const subtotal = totals?.subtotal !== undefined ? totals.subtotal : (order?.subtotal != null ? Number(order.subtotal) : calculatedSubtotal);
+  const gstAmount = totals?.gst !== undefined ? totals.gst : (order?.tax != null ? Number(order.tax) : 0);
+  const shippingAmount = totals?.shipping !== undefined 
+    ? totals.shipping 
+    : (order?.shippingCharge !== undefined 
+        ? Number(order.shippingCharge) 
+        : calculateShippingCharge(subtotal, order?.shippingAddress));
   const grandTotal =
     totals?.total !== undefined
       ? totals.total

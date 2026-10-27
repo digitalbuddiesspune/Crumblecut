@@ -9,6 +9,7 @@ import {
   verifyIpnSecureHash,
 } from '../services/airpay.service.js';
 import { sendOrderInvoiceEmail } from '../services/invoiceEmail.service.js';
+import { calculateShippingCharge } from '../utils/shipping.js';
 
 function buildCartItems(cart) {
   return cart.items.map((i) => {
@@ -30,9 +31,9 @@ function buildCartItems(cart) {
   });
 }
 
-function computePayable(items) {
+function computePayable(items, shippingAddress = null) {
   const subtotal = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
-  const shippingCharge = subtotal < 5000 ? 99 : 0;
+  const shippingCharge = calculateShippingCharge(subtotal, shippingAddress);
   const tax = Math.round(subtotal * 0.05);
   return {
     subtotal,
@@ -198,6 +199,9 @@ async function fulfillPendingPayment(pending, { apTransactionId, transactionId, 
   const order = await Order.create({
     user: pending.user,
     items: pending.items,
+    subtotal: pending.subtotal,
+    shippingCharge: pending.shippingCharge,
+    tax: pending.tax,
     amount: pending.amount,
     currency: pending.currency || 'INR',
     status: 'paid',
@@ -246,17 +250,17 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
-    const items = buildCartItems(cart);
-    const { amount } = computePayable(items);
-    if (!amount || amount <= 0) {
-      return res.status(400).json({ error: 'Invalid cart amount' });
-    }
-
     const shippingAddress = await loadShippingAddress(userId);
     if (!shippingAddress?.mobileNumber) {
       return res.status(400).json({
         error: 'Shipping address with mobile number is required before payment',
       });
+    }
+
+    const items = buildCartItems(cart);
+    const { amount, shippingCharge, subtotal, tax } = computePayable(items, shippingAddress);
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Invalid cart amount' });
     }
 
     const orderid = makeOrderId();
@@ -287,6 +291,9 @@ export const createOrder = async (req, res) => {
         orderid,
         user: userId,
         items,
+        subtotal,
+        shippingCharge,
+        tax,
         amount,
         currency: 'INR',
         shippingAddress,
@@ -338,13 +345,16 @@ export const verifyPayment = async (req, res) => {
           orderid,
         });
       }
-      const items = buildCartItems(cart);
-      const { amount } = computePayable(items);
       const shippingAddress = await loadShippingAddress(userId);
+      const items = buildCartItems(cart);
+      const { amount, shippingCharge, subtotal, tax } = computePayable(items, shippingAddress);
       pending = await PendingPayment.create({
         orderid,
         user: userId,
         items,
+        subtotal,
+        shippingCharge,
+        tax,
         amount,
         shippingAddress,
         apTransactionId: ap_transactionid || '',
@@ -506,9 +516,6 @@ export const createCODOrder = async (req, res) => {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
-    const items = buildCartItems(cart);
-    const { amount } = computePayable(items);
-
     let shippingAddress = null;
     try {
       shippingAddress = await loadShippingAddress(userId);
@@ -522,9 +529,15 @@ export const createCODOrder = async (req, res) => {
       });
     }
 
+    const items = buildCartItems(cart);
+    const { amount, shippingCharge, subtotal, tax } = computePayable(items, shippingAddress);
+
     const order = await Order.create({
       user: userId,
       items,
+      subtotal,
+      shippingCharge,
+      tax,
       amount,
       currency: 'INR',
       status: 'pending',

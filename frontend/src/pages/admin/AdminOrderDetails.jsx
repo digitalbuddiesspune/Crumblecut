@@ -94,11 +94,14 @@ const AdminOrderDetails = () => {
   const transactionId = order?.transactionId || order?.airpayTransactionId || order?.razorpayPaymentId || order?.razorpayOrderId || order?.airpayOrderId || '—';
 
   const subtotal = useMemo(() => {
+    if (order?.subtotal != null) return Number(order.subtotal);
     if (!order?.items) return 0;
     return order.items.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
   }, [order]);
+  const shipping = Number(order?.shippingCharge || 0);
+  const tax = Number(order?.tax || 0);
   const total = Number(order?.amount || 0);
-  const discount = Math.max(0, subtotal - total);
+  const discount = Math.max(0, subtotal + shipping + tax - total);
 
   const updateOrder = async (payload) => {
     setSaving(true);
@@ -296,9 +299,9 @@ const AdminOrderDetails = () => {
       <div className="bg-white border rounded-xl shadow-sm p-4 space-y-2">
         <div className="text-sm font-semibold">Price Breakdown</div>
         <div className="flex justify-between text-sm"><span>Subtotal</span><span>{formatINR(subtotal)}</span></div>
-        <div className="flex justify-between text-sm"><span>Discount</span><span>{formatINR(discount)}</span></div>
-        <div className="flex justify-between text-sm"><span>Tax</span><span>₹0</span></div>
-        <div className="flex justify-between text-sm"><span>Shipping</span><span>₹0</span></div>
+        {discount > 0 && <div className="flex justify-between text-sm"><span>Discount</span><span>-{formatINR(discount)}</span></div>}
+        <div className="flex justify-between text-sm"><span>Tax (5%)</span><span>{formatINR(tax)}</span></div>
+        <div className="flex justify-between text-sm"><span>Shipping</span><span>{shipping > 0 ? formatINR(shipping) : 'FREE'}</span></div>
         <div className="flex justify-between text-base font-semibold border-t pt-2"><span>Total</span><span>{formatINR(total)}</span></div>
       </div>
 
