@@ -40,19 +40,23 @@ export default function Invoice({
 
   const customerName =
     order?.shippingAddress?.fullName ||
+    order?.shippingAddress?.name ||
+    order?.user?.name ||
     user?.name ||
-    user?.firstName
-      ? `${user?.firstName || ''} ${user?.lastName || ''}`.trim()
-      : 'Valued Customer';
+    (user?.firstName ? `${user.firstName} ${user?.lastName || ''}`.trim() : null) ||
+    'Customer';
 
   const customerPhone =
     order?.shippingAddress?.mobileNumber ||
+    order?.shippingAddress?.phone ||
+    order?.user?.phone ||
     user?.phone ||
     user?.mobile ||
     '—';
 
   const customerEmail =
     order?.shippingAddress?.email ||
+    order?.user?.email ||
     user?.email ||
     '—';
 
@@ -160,10 +164,15 @@ export default function Invoice({
           <div className="invoice-export-block">
             <div className="invoice-export-block-title">BILLED & SHIPPED TO</div>
             <div className="invoice-export-body-text">
-              <div style={{ fontWeight: 700, color: '#111827', fontSize: '13px' }}>{customerName}</div>
-              <div>{shippingAddr}</div>
-              <div style={{ marginTop: '4px' }}>Phone: {customerPhone}</div>
-              <div>Email: {customerEmail}</div>
+              <div style={{ marginBottom: '6px' }}>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#6B7280', fontWeight: 600 }}>Customer Name: </span>
+                <strong style={{ color: '#111827', fontSize: '13px' }}>{customerName}</strong>
+              </div>
+              <div style={{ color: '#374151', fontSize: '12px', lineHeight: 1.5 }}>{shippingAddr}</div>
+              <div style={{ marginTop: '6px', fontSize: '12px', color: '#4B5563' }}>
+                <div><strong>Phone:</strong> {customerPhone}</div>
+                <div><strong>Email:</strong> {customerEmail}</div>
+              </div>
             </div>
           </div>
 
@@ -369,9 +378,12 @@ export default function Invoice({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
             <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Billed & Shipped To</h4>
-            <div className="text-sm font-bold text-gray-900">{customerName}</div>
+            <div className="text-sm font-bold text-gray-900 mb-1">
+              <span className="text-xs font-semibold text-gray-500 uppercase mr-1">Customer Name:</span>
+              <span>{customerName}</span>
+            </div>
             <div className="text-xs text-gray-600 mt-1 leading-relaxed">{shippingAddr}</div>
-            <div className="text-xs text-gray-600 mt-2">
+            <div className="text-xs text-gray-600 mt-2 space-y-0.5">
               <div>Phone: <span className="font-medium text-gray-800">{customerPhone}</span></div>
               <div>Email: <span className="font-medium text-gray-800">{customerEmail}</span></div>
             </div>

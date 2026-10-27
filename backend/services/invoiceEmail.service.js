@@ -103,6 +103,7 @@ function buildInvoiceEmailHtml(order, customerName) {
               <td style="width: 50%; vertical-align: top; padding-right: 12px;">
                 <h3 style="margin: 0 0 8px; font-size: 12px; text-transform: uppercase; color: #6b7280;">Billed & Shipped To</h3>
                 <div style="font-size: 13px; color: #374151; line-height: 1.5;">
+                  <div style="margin-bottom: 4px;"><strong>Customer Name:</strong> ${customerName}</div>
                   ${shippingAddr}
                 </div>
               </td>
