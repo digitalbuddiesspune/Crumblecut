@@ -58,15 +58,27 @@ export async function sendOtp(mobile) {
     mobile: msgMobile,
     otp_length: '6',
     otp_expiry: '5',
+    company: brandName,
+    company_name: brandName,
+    brand: brandName,
+    brand_name: brandName,
   });
   if (useSender && senderId) {
     params.set('sender', senderId);
   }
 
-  // Body also carries template_id (some MSG91 setups read it from body)
+  // Body also carries template_id and dynamic template placeholders
   const body = {
     template_id: templateId,
     mobile: msgMobile,
+    company: brandName,
+    Company: brandName,
+    company_name: brandName,
+    brand: brandName,
+    brand_name: brandName,
+    Param1: brandName,
+    var1: brandName,
+    name: brandName,
   };
   if (useSender && senderId) {
     body.sender = senderId;
